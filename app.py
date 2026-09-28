@@ -162,8 +162,8 @@ if st.session_state.conjunto_base and st.session_state.pares:
             st.markdown("### 📦 Clases de Equivalencia")
             particiones = relacion.generar_particiones()
             for i, clase in enumerate(particiones):
-                st.write(f"**Clase {i+1}:** {', '.join(clase)}")
-                
+                #st.write(f"**Clase {i+1}:** {', '.join(clase)}")
+                st.write(f"**Clase {i+1}:** {{{', '.join(clase)}}}")
             st.subheader("🧮 Matriz Booleana")
             # Ordenamos los elementos para que la tabla se vea limpia (1, 2, 3, 4, 5)
             elementos = sorted(list(relacion.conjunto_base))
