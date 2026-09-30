@@ -69,6 +69,49 @@ class Relacion:
         """Una relación es de orden parcial si es Reflexiva, Antisimétrica y Transitiva."""
         return self.es_reflexiva() and self.es_antisimetrica() and self.es_transitiva()
 
+    # 1. REFLEXIVA: Exige que todo elemento x tenga su par diagonal (x, x)
+    def obtener_fallas_reflexiva(self) -> list:
+        """Retorna los pares diagonales (x, x) que hacen falta en R."""
+        return [(x, x) for x in self.conjunto_base if (x, x) not in self.pares]
+
+    # 2. ANTIRREFLEXIVA: Prohíbe la presencia de cualquier par diagonal (x, x)
+    def obtener_fallas_antirreflexiva(self) -> list:
+        """Retorna los pares diagonales (x, x) que existen en R y violan la propiedad."""
+        return [(x, x) for x in self.conjunto_base if (x, x) in self.pares]
+
+    # 3. SIMÉTRICA: Exige que si existe (x, y), también exista su par inverso (y, x)
+    def obtener_fallas_simetrica(self) -> list:
+        """Retorna los pares inversos (y, x) que faltan en R."""
+        return [(y, x) for x, y in self.pares if (y, x) not in self.pares]
+
+    # 4. ASIMÉTRICA: Prohíbe pares simétricos e irreflexión total (no permite (y, x) ni (x, x))
+    def obtener_fallas_asimetrica(self) -> list:
+        """Retorna los pares inversos (y, x) o diagonales (x, x) que violan la propiedad."""
+        violaciones = set()
+        for x, y in self.pares:
+            if (y, x) in self.pares:
+                violaciones.add((y, x) if x != y else (x, x))
+        return list(violaciones)
+
+    # 5. ANTISIMÉTRICA: Prohíbe pares espejo con elementos distintos (x != y)
+    def obtener_fallas_antisimetrica(self) -> list:
+        """Retorna los pares bidireccionales con x != y que violan la propiedad."""
+        violaciones = set()
+        for x, y in self.pares:
+            if (y, x) in self.pares and x != y:
+                violaciones.add((x, y))
+        return list(violaciones)
+
+    # 6. TRANSITIVA: Exige que si existen (x, y) y (y, z), debe existir el enlace directo (x, z)
+    def obtener_fallas_transitiva(self) -> list:
+        """Retorna los enlaces directos (x, z) faltantes por encadenamiento."""
+        faltantes = set()
+        for x, y in self.pares:
+            for y2, z in self.pares:
+                if y == y2 and (x, z) not in self.pares:
+                    faltantes.add((x, z))
+        return list(faltantes)
+
     def analizar(self):
         """Imprime un resumen completo del análisis de la relación."""
         print(f"\n--- Análisis de la Relación ---")

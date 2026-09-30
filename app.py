@@ -142,13 +142,48 @@ if st.session_state.conjunto_base and st.session_state.pares:
     st.markdown(f"**Pares de R ({len(relacion.pares)}):** `{sorted(list(relacion.pares))}`")
     
     st.subheader("1. Propiedades Básicas")
-    # Mostramos qué cumple y qué no (agregué transitiva como ejemplo)
-    st.write(f"Reflexiva: {'✅' if relacion.es_reflexiva() else '❌'}")
-    st.write(f"Simétrica: {'✅' if relacion.es_simetrica() else '❌'}")
-    st.write(f"Transitiva: {'✅' if relacion.es_transitiva() else '❌'}")
-    st.write(f"Antirreflexiva: {'✅' if relacion.es_antirreflexiva() else '❌'}")
-    st.write(f"Asimétrica: {'✅' if relacion.es_asimetrica() else '❌'}")
-    st.write(f"Antisimétrica: {'✅' if relacion.es_antisimetrica() else '❌'}")
+
+    # --- Reflexiva ---
+    if relacion.es_reflexiva():
+        st.write("Reflexiva: ✅")
+    else:
+        faltantes = relacion.obtener_fallas_reflexiva()
+        st.write(f"Reflexiva: ❌ *(No es reflexiva porque le faltan los pares: `{sorted(faltantes)}`)*")
+
+    # --- Antirreflexiva ---
+    if relacion.es_antirreflexiva():
+        st.write("Antirreflexiva: ✅")
+    else:
+        violaciones = relacion.obtener_fallas_antirreflexiva()
+        st.write(f"Antirreflexiva: ❌ *(No es antirreflexiva porque contiene los pares diagonales: `{sorted(violaciones)}`)*")
+
+    # --- Simétrica ---
+    if relacion.es_simetrica():
+        st.write("Simétrica: ✅")
+    else:
+        faltantes = relacion.obtener_fallas_simetrica()
+        st.write(f"Simétrica: ❌ *(No es simétrica porque le faltan los pares inversos: `{sorted(faltantes)}`)*")
+
+    # --- Asimétrica ---
+    if relacion.es_asimetrica():
+        st.write("Asimétrica: ✅")
+    else:
+        violaciones = relacion.obtener_fallas_asimetrica()
+        st.write(f"Asimétrica: ❌ *(No es asimétrica porque contiene pares simétricos o diagonales: `{sorted(violaciones)}`)*")
+
+    # --- Antisimétrica ---
+    if relacion.es_antisimetrica():
+        st.write("Antisimétrica: ✅")
+    else:
+        violaciones = relacion.obtener_fallas_antisimetrica()
+        st.write(f"Antisimétrica: ❌ *(No es antisimétrica porque contiene pares bidireccionales con elementos distintos: `{sorted(violaciones)}`)*")
+
+    # --- Transitiva ---
+    if relacion.es_transitiva():
+        st.write("Transitiva: ✅")
+    else:
+        faltantes = relacion.obtener_fallas_transitiva()
+        st.write(f"Transitiva: ❌ *(No es transitiva porque le faltan los enlaces por encadenamiento: `{sorted(faltantes)}`)*")
     
     st.subheader("2. Clasificación y Gráficos")
     
